@@ -6,6 +6,7 @@ const app = express();
 const uuid = require('./helpers/uuid');
 let noteList = require('./db/db.json');
 
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
@@ -24,7 +25,45 @@ app.get('/api/notes', (req, res) => {
   res.json(noteList);
 });
 
-app.post('/api/notes', (req, res) => {});
+// post request to add notes
+app.post('/api/notes', (req, res) => {
+  console.log(`${req.method} post request received`);
+  const{ title, text } = req.body;
+  if (title && text) {
+    const newNote = {
+      title,
+      text,
+      id: uuid()
+    };
+
+    fs.readFile('./db/db.json', 'utf-8', (err, data) => {
+      if (err) {
+        console.log(err);
+      } else {
+        const notesData = JSON.parse(data);
+        notesData.push(newNote);
+        noteList = parsedNotes;
+
+        fs.writeFile('./db/db.json', JSON.stringify(noteList), (err, data) => {
+          if (err) {
+            console.log(err)
+          }else {
+            console.log('Notes updated succesfully')
+          };
+        });
+      };
+    });
+
+    const response = {
+      status: 'success',
+      body: newNote
+    };
+
+    res.json(response);
+  } else {
+    res.json('Note posting failed')
+  }
+});
 
 app.delete("/api/notes/:id", (req, res) => {});
 
