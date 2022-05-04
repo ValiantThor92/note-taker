@@ -92,6 +92,11 @@ app.delete("/api/notes/:id", (req, res) => {
   res.json(noteList);
 });
 
+// returns user to index if attempting to visit nonexisting api routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
 app.listen(PORT, () => {
   console.log(`App listening at http://localhost:${PORT}`);
 })
