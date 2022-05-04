@@ -65,7 +65,32 @@ app.post('/api/notes', (req, res) => {
   }
 });
 
-app.delete("/api/notes/:id", (req, res) => {});
+app.delete("/api/notes/:id", (req, res) => {
+  console.log(`${req.method} recieved`);
+  const noteId = req.params.id;
+  const updatedArray = [];
+
+  for (let i=0; i<noteList.length; i++) {
+    if (noteList[i].id !== noteId) {
+      updatedArray.push(noteList[i]);
+    }
+  }
+
+  if(updatedArray.length === noteList.length) {
+    res.status(404);
+    return;
+  }
+  noteList = updatedArray;
+
+  fs.writeFile('./db/db.json', JSON.stringify(noteList), (err, data) => {
+    if (err) {
+      console.err(403)
+    } else {
+      console.log('Notes updated succesfully')
+    };
+  });
+  res.json(noteList);
+});
 
 app.listen(PORT, () => {
   console.log(`App listening at http://localhost:${PORT}`);
