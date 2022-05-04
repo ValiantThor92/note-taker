@@ -6,9 +6,12 @@ const app = express();
 const uuid = require('./helpers/uuid');
 let noteList = require('./db/db.json');
 
+const { uptime } = require('process');
 
+// use express to parse data
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+// enable access to public directory
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
@@ -28,7 +31,7 @@ app.get('/api/notes', (req, res) => {
 // post request to add notes
 app.post('/api/notes', (req, res) => {
   console.log(`${req.method} post request received`);
-  const{ title, text } = req.body;
+  const{ title, text } = req.body; // destructure req.body to send back to client
   if (title && text) {
     const newNote = {
       title,
@@ -36,7 +39,7 @@ app.post('/api/notes', (req, res) => {
       id: uuid()
     };
 
-    fs.readFile('./db/db.json', 'utf-8', (err, data) => {
+    fs.readFile('./db/db.json', 'utf-8', (err, data) => { //obtain existing notes arrays
       if (err) {
         console.log(err);
       } else {
@@ -92,7 +95,7 @@ app.delete("/api/notes/:id", (req, res) => {
   res.json(noteList);
 });
 
-// returns user to index if attempting to visit nonexisting api routes
+// returns user to index if attempting to visit nonexisting routes
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, './public/index.html'));
 });
