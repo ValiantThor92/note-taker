@@ -5,7 +5,7 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 const uuid = require('./helpers/uuid');
 let noteList = require('./db/db.json');
-
+//this is new to me so im hoping im using it correctly
 const { uptime } = require('process');
 
 // use express to parse data
@@ -24,7 +24,9 @@ app.get('/notes', (req, res) => {
 
 //get request for all notes
 app.get('/api/notes', (req, res) => {
+  //console log that get request was recieved
   console.log(`${req.method} get request for all notes received`);
+  //send note list to client
   res.json(noteList);
 });
 
@@ -32,7 +34,7 @@ app.get('/api/notes', (req, res) => {
 app.post('/api/notes', (req, res) => {
   console.log(`${req.method} post request received`);
   const{ title, text } = req.body; // destructure req.body to send back to client
-  if (title && text) {
+  if (title && text) { //if both title and text fields are filled, create new note
     const newNote = {
       title,
       text,
@@ -68,7 +70,7 @@ app.post('/api/notes', (req, res) => {
   }
 });
 
-app.delete("/api/notes/:id", (req, res) => {
+app.delete("/api/notes/:id", (req, res) => {// delete note route
   console.log(`${req.method} recieved`);
   const noteId = req.params.id;
   const updatedArray = [];
