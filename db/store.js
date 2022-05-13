@@ -1,11 +1,12 @@
-const util = require('util');
 const fs = require('fs');
-const {v1} = require('uuid');
+const util = require('util');
+const uuid = require('uuid');
 
 // create read/write files for pathways
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 
+// class that stores notes
 class Store {
   read() {
     return readFile('db/db.json', 'utf-8');
@@ -28,19 +29,22 @@ class Store {
   };
 
   addNote(note) {
-  const { title, text } = note;
-
-  if (!title || !text) {
-    throw new Error("Note 'title' and 'text' must be filled in!");
-  }
-  // add unique id using uuid 
-  const newNote = { title, text, id: v1() };
-  return this.getNotes()
-  .then((notes) => [...notes, newNote])
-  .then((updatedNotes) => this.write(updatedNotes))
-  .then(() => newNote);
+    const { title, text } = note;
+    
+    // add unique id using uuid 
+    const newNote = { title, text, id: uuid() };
+    return this.getNotes()
+    .then((notes) => [...notes, newNote])
+    .then((updatedNotes) => this.write(updatedNotes))
+    .then(() => newNote);
   };
 
+  deleteNote(id) {
+    // get all notes, remove note with corresponding id, rewrite remaining notes
+    return this.getNotes()
+    .then((notes) => notes.filter((note) => note.id !== id))
+    .then((filteredNotes) => this.write(filteredNotes));
+  };
 };
 
 module.exports = new Store();

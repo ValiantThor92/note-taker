@@ -1,13 +1,14 @@
 // import necessary dependencies
 const express = require('express');
+const fs = require("fs");
 const apiRoutes = require('./routes/apiRoutes');
 const htmlRoutes = require('./routes/htmlRoutes');
 
 // create port and initialize express
-const PORT = process.env.PORT || 3001;
 const app = express();
+const PORT = process.env.PORT || 3001;
 
-// middleware
+// middleware and api routes
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
