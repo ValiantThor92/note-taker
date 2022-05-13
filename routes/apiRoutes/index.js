@@ -13,4 +13,11 @@ router.get('/notes', (req, res) => {
   .catch((err) => res.status(500).json(err));
 });
 
+// creates note and posts to notes.html
+router.post('/notes', (req, res) => {
+  store.addNote(req.body)
+  .then((note) => res.json(note))
+  .catch((err) => res.status(500).json(err));
+});
+
 module.exports = router;
