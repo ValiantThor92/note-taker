@@ -1,7 +1,29 @@
 # Note Taker
 
-<!-- What was your motivation?
-Why did you build this project? (Note: the answer is not "Because it was a homework assignment.")
-What problem does it solve?
-What did you learn?
-What makes your project stand out? -->
+## USER STORY
+AS A small business owner <br>
+I WANT to be able to write and save notes <br>
+SO THAT I can organize my thoughts and keep track of tasks I need to complete
+
+## Table of Contents 
+------
+* [About](#About)
+
+* [Demo](#Demo)
+
+* [Links](#Links)
+
+## About
+This a project was built using <br>
+node.js <br>
+express.js <br>
+Herkou - application deployment <br>
+javaScript
+
+## Demo 
+![screenshot of the application](note-taker.JPG)
+
+## Links
+
+![Heroku](https://mighty-bayou-95909.herokuapp.com/)
+![Github](https://github.com/ValiantThor92/note-taker)
