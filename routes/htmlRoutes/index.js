@@ -3,9 +3,6 @@ const express = require('express');
 const path = require('path');
 const router = express.Router();
 
-// class for store
-const store = require('../../db/store');
-
 // get notes file to send notes.html
 router.get('/notes', (req, res) => {
   res.sendFile(path.join(__dirname, '../../public/notes.html'));

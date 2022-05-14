@@ -3,18 +3,18 @@ const util = require('util');
 const uuid = require('uuid');
 
 // create read/write files for pathways
-const readFile = util.promisify(fs.readFile);
-const writeFile = util.promisify(fs.writeFile);
+const readFileAsync = util.promisify(fs.readFile);
+const writeFileAsync = util.promisify(fs.writeFile);
 
 // class that stores notes
 class Store {
   read() {
-    return readFile('db/db.json', 'utf-8');
-  };
+    return readFileAsync("db/db.json", "utf8");
+  }
 
   write(note) {
-    return writeFile('db/db.json', JSON.stringify(note));
-  };
+    return writeFileAsync("db/db.json", JSON.stringify(note));
+  }
 
   getNotes() {
     return this.read().then((notes) => {
@@ -26,25 +26,37 @@ class Store {
       }
       return parsedNotes;
     });
-  };
+  }
 
   addNote(note) {
-    const { title, text } = note;
-    
-    // add unique id using uuid 
-    const newNote = { title, text, id: uuid() };
+    // check for title and txt content
+    if (!note.title || !note.text) {
+      throw new Error("Empty data");
+    }
+    // unique id
+    note.id = uuid.v4();
     return this.getNotes()
-    .then((notes) => [...notes, newNote])
-    .then((updatedNotes) => this.write(updatedNotes))
-    .then(() => newNote);
-  };
+    .then((notes) => {
+      return [...notes, note];
+    })
+    .then((updatedNotes) => {
+      return this.write(updatedNotes);
+    })
+    .then(() => {
+      return note;
+    });
+  }
 
   deleteNote(id) {
     // get all notes, remove note with corresponding id, rewrite remaining notes
     return this.getNotes()
-    .then((notes) => notes.filter((note) => note.id !== id))
-    .then((filteredNotes) => this.write(filteredNotes));
-  };
-};
+    .then((notes) => {
+      return notes.filter((note) => note.id !== id);
+    })
+    .then((updatedNotes) => {
+      this.write(updatedNotes);
+    });
+  }
+}
 
 module.exports = new Store();
