@@ -25,5 +25,5 @@ javaScript
 
 ## Links
 
-![Heroku](https://mighty-bayou-95909.herokuapp.com/)
+![Heroku](https://thors-note-taker.herokuapp.com/)
 ![Github](https://github.com/ValiantThor92/note-taker)
